@@ -1,7 +1,7 @@
 package com.maple.outputlog;
 import java.io.*;
 
-public class Reader {
+public class Analyze {
 
 	private int ie = 0;
 	private int firefox = 0;
@@ -11,13 +11,13 @@ public class Reader {
 	
 	int allsum = ie+firefox+safari+chrome+opera;
 	
-	public void stateCodeRead(String logfile) throws IOException {
+	public void readStateCode(String logfile) throws IOException {
 
 		int wrongCode = 0;
 		int successCode = 0;
 		int nonpageCode = 0;
 		String state = logfile.substring(1,4);
-		System.out.println(state);
+		//System.out.println(state);
 		int stateCode = Integer.parseInt(state);
 		if(stateCode==10){
 			wrongCode = wrongCode+1;
@@ -29,7 +29,7 @@ public class Reader {
 			nonpageCode = nonpageCode+1;
 		}
 	}
-	public void urlRead(String logfile) throws IOException {
+	public void readUrl(String logfile) throws IOException {
 
 		int idBlog = 0;
 		int idBook = 0;
@@ -39,41 +39,35 @@ public class Reader {
 		int idVclip = 0;
 		
 		String id = logfile;
-		boolean check = id.contains("blog");
-		if(check==true) {
-
+		if(id.contains("blog")) {
+			idBlog = idBlog+1;
 		}
-		boolean check2 = id.contains("book");
-		if(check2==true) {
+		if(id.contains("book")) {
 			idBook = idBook+1;
 		}
-		boolean check3 = id.contains("book");
-		if(check3==true) {
+		if(id.contains("book")) {
 			idImage = idImage+1;
 		}
-		boolean check4 = id.contains("knowledge");
-		if(check4==true) {
+		if(id.contains("knowledge")) {
 			idKnowledge = idKnowledge+1;
 		}
-		boolean check5 = id.contains("news");
-		if(check5==true) {
+		if(id.contains("news")) {
 			idNews = idNews+1;
 		}
-		boolean check6 = id.contains("vclip");
-		if(check6==true) {
+		if(id.contains("vclip")) {
 			idVclip = idVclip+1;
 		}
 	}
 	
-	public void apiKeyRead(String logfile) throws IOException {
+	public void readApiKey(String logfile) throws IOException {
 
 		int indexOf = logfile.indexOf("=");
 		int lastIndexOf = logfile.lastIndexOf("&");
 		String apiKey = logfile.substring(indexOf+1, lastIndexOf);
-		System.out.println(apiKey);
+		//System.out.println(apiKey);
 	}
 
-	public void webRead(String logfile) throws IOException {
+	public void readWeb(String logfile) throws IOException {
 
 		String web =logfile;
 		
