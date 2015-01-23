@@ -1,73 +1,154 @@
 package com.maple.outputlog;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Analyze {
 
-	private int ie = 0;
-	private int firefox = 0;
-	private int safari = 0;
-	private int chrome = 0;
-	private int opera = 0;
-	
-	int allsum = ie+firefox+safari+chrome+opera;
-	
-	public void readStateCode(String logfile) throws IOException {
+	private static int ie = 0;
+	private static int firefox = 0;
+	private static int safari = 0;
+	private static int chrome = 0;
+	private static int opera = 0;
+	private static float rate = 0;
+	private static int wrongCode = 0;
+	private static int successCode = 0;
+	private static int nonpageCode = 0;
+	private int apikeyIndex = 0;
+	private int serviceIdIndex = 0;
+	private int maximum = 1;
+	private int temp = 1;
+	private String tempString = " ";
+	private String maximumString = " ";
+	private boolean apiCheck = false;
+	private boolean serviceIdCheck = false;
 
-		int wrongCode = 0;
-		int successCode = 0;
-		int nonpageCode = 0;
-		String state = logfile.substring(1,4);
+	
+	private static int allsum = 0;
+	
+	ArrayList <String> apiKeyList = new ArrayList <String>() ;
+	ArrayList <Integer> apikeyCountList = new ArrayList <Integer>();
+	ArrayList <String> serviceIdList = new ArrayList <String>();
+	ArrayList <Integer> serviceIdCountList = new ArrayList <Integer>();
+	
+	
+	public void readStateCode(String logfile) {
+		
+		String state = logfile.substring(1,3);
 		//System.out.println(state);
 		int stateCode = Integer.parseInt(state);
 		if(stateCode==10){
 			wrongCode = wrongCode+1;
 		}
-		else if(stateCode==200) {
+		else if(stateCode==20) {
 			successCode = successCode+1;
 		}
-		else if(stateCode==404) {
+		else if(stateCode==40) {
 			nonpageCode = nonpageCode+1;
 		}
 	}
-	public void readUrl(String logfile) throws IOException {
-
-		int idBlog = 0;
-		int idBook = 0;
-		int idImage = 0;
-		int idKnowledge = 0;
-		int idNews = 0;
-		int idVclip = 0;
-		
-		String id = logfile;
-		if(id.contains("blog")) {
-			idBlog = idBlog+1;
-		}
-		if(id.contains("book")) {
-			idBook = idBook+1;
-		}
-		if(id.contains("book")) {
-			idImage = idImage+1;
-		}
-		if(id.contains("knowledge")) {
-			idKnowledge = idKnowledge+1;
-		}
-		if(id.contains("news")) {
-			idNews = idNews+1;
-		}
-		if(id.contains("vclip")) {
-			idVclip = idVclip+1;
-		}
+	
+	public int outWrongCode() {
+		return wrongCode;
+	}
+	public int outSuccessCode() {
+		return successCode;
+	}
+	public int ouNonpageCode() {
+		return nonpageCode;
 	}
 	
-	public void readApiKey(String logfile) throws IOException {
+	public void readUrl(String logfile) {
 
-		int indexOf = logfile.indexOf("=");
-		int lastIndexOf = logfile.lastIndexOf("&");
-		String apiKey = logfile.substring(indexOf+1, lastIndexOf);
-		//System.out.println(apiKey);
+		
+		
+		int startIndex = logfile.lastIndexOf("/");
+		int endIndex = logfile.indexOf("?");
+		String serviceId = logfile.substring(startIndex+1, endIndex);
+
+		for(int i=serviceIdIndex-1;i>=0;i--) {
+			if(serviceIdList.get(i)==serviceId) {
+				serviceIdCountList.add(i,+1);
+				serviceIdCheck = true;
+				break;
+			}
+		}
+		if(serviceIdCheck==false) {
+			serviceIdList.add(serviceIdIndex,serviceId);
+			serviceIdCountList.add(serviceIdIndex,1);
+			serviceIdIndex+=1;
+		}
+		else {
+			serviceIdCheck=false;
+		}
+		
 	}
+	
+	public void countServiceId() {
+		int firstServiceId = 0;
+		int secondServiceId = 0;
+		int ThirdServiceId = 0;
+		for(int i=serviceIdIndex-1;i>0;i--) {
+			if(serviceIdCountList.get(i)>serviceIdCountList.get(i-1)) {
+				firstServiceId = i;
+			}
+		}
+		for(int i=serviceIdIndex-1;i>0;i--) {
+			if(serviceIdCountList.get(i)<serviceIdCountList.get(firstServiceId)&&serviceIdCountList.get(i-1)<serviceIdCountList.get(firstServiceId))
+				if(serviceIdCountList.get(i)>serviceIdCountList.get(i-1)) {
+					secondServiceId = i;
+				}
+		}
+		for(int i=serviceIdIndex-1;i>0;i--) {
+			if(serviceIdCountList.get(i)<serviceIdCountList.get(secondServiceId)&&serviceIdCountList.get(i-1)<serviceIdCountList.get(secondServiceId))
+				if(serviceIdCountList.get(i)>serviceIdCountList.get(i-1)) {
+					ThirdServiceId = i;
+				}
+		}
+		
+		System.out.println("상위 3개의 API ServiceID와 각각의 요청 수:");
+		System.out.println(serviceIdList.get(firstServiceId)+":"+serviceIdCountList.get(firstServiceId));
+		System.out.println(serviceIdList.get(secondServiceId)+":"+serviceIdCountList.get(secondServiceId));
+		System.out.println(serviceIdList.get(ThirdServiceId)+":"+serviceIdCountList.get(ThirdServiceId));
+		
+	}
+	
+	public void readApiKey(String logfile)  {
 
-	public void readWeb(String logfile) throws IOException {
+		int startIndex = logfile.indexOf("=");
+		int endIndex = logfile.indexOf("&");
+		String apiKey = logfile.substring(startIndex+1, endIndex);
+
+		for(int i=apikeyIndex-1;i>=0;i--) {
+			if(apiKeyList.get(i)==apiKey) {
+				apikeyCountList.add(i,+1);
+				apiCheck = true;
+				break;
+			}
+		}
+		if(apiCheck==false) {
+			apiKeyList.add(apikeyIndex,apiKey);
+			apikeyCountList.add(apikeyIndex,1);
+			apikeyIndex+=1;
+		}
+		else {
+			apiCheck=false;
+		}
+		
+	}
+	
+	public String outApiKey() {
+		int apiKeyTemp = 0;
+		for(int i=apikeyIndex-1;i>0;i--) {
+			if(apikeyCountList.get(i)>apikeyCountList.get(i-1)) {
+				apiKeyTemp = i;
+			}
+		}
+		return apiKeyList.get(apiKeyTemp);
+	}
+	
+
+
+	public void readWeb(String logfile){
 
 		String web =logfile;
 		
@@ -97,25 +178,59 @@ public class Analyze {
 		}
 		else {}
 	}
-	public int outputIe() {
-		return ie;
-	}
-	public int outputFirefox() {
-		return firefox;
-	}
-	public int outputSafari() {
-		return safari;
-	}
-	public int outputChrome() {
-		return chrome;
-	}
-	public int outputOpera() {
-		return opera;
+	
+	public int addAllBrowser(){
+		allsum = ie+firefox+safari+chrome+opera;
+		return allsum;
 	}
 	
-	public void rate(int web) {
-		float rate = (web/allsum)*100;
+	public float calculateRate(int web) {
+		rate = (web/addAllBrowser())*100;
+		return rate;
 	}
+	
+	public float outIe() {
+		return calculateRate(ie);
+	}
+	public float outFirefox() {
+		return calculateRate(firefox);
+	}
+	public float outSafari() {
+		return calculateRate(safari);
+	}
+	public float outChrome() {
+		return calculateRate(chrome);
+	}
+	public float outOpera() {
+		return calculateRate(opera);
+	}
+	
+
+	
+	public void readTime(String logfile) {
+		int startIndex = logfile.indexOf(" ");
+		int endIndex = logfile.lastIndexOf("]");
+		String time = logfile.substring(startIndex+1, endIndex);
+		//System.out.println(apiKey);
+		if(tempString==time) {
+			temp+=1;
+		}
+		else if(tempString!=time) {
+			if(temp>maximum) {
+				maximum=temp;
+				maximumString=tempString;
+			}
+			tempString=time;
+			temp=1;
+		}
+		
+		
+	}
+	public String outMaximumString() {
+		return maximumString;
+	}
+	
+	
 
 }
 
