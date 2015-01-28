@@ -3,6 +3,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+@Service
+@Controller
+@Repository
+@Component
 public class ReadFile {
 	
 	private String line;
@@ -18,7 +26,6 @@ public class ReadFile {
 		while((input.readLine())!=null) {
 			String line = input.readLine(); //한 줄 읽어오기
 			String result[] = line.split("]");
-			result[0] = result[0];
 			result[3] = result[3]+"]";
 			analyze.readApiKey(result[1]);//apikey 분석(어떤 apikey가 있는지,몇개가 있는지)
 			analyze.readStateCode(result[0]);//상태코드 분석(상태코드가 각각 몇개씩 있는지)

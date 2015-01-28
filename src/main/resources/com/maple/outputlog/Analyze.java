@@ -2,28 +2,38 @@ package com.maple.outputlog;
 import java.io.*;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
+@Service
+@Controller
+@Repository
+@Component
+
 public class Analyze {
 
-	private static int ie = 0;
-	private static int firefox = 0;
-	private static int safari = 0;
-	private static int chrome = 0;
-	private static int opera = 0;
-	private static float rate = 0;
-	private static int wrongCode = 0;
-	private static int successCode = 0;
-	private static int nonpageCode = 0;
-	private int apikeyIndex = 0;
-	private int serviceIdIndex = 0;
-	private int maximum = 1;
-	private int temp = 1;
-	private String tempString = " ";
-	private String maximumString = " ";
+	private  int ie = 0;
+	private  int firefox = 0;
+	private  int safari = 0;
+	private  int chrome = 0;
+	private  int opera = 0;
+	private  float rate = 0;
+	private  int wrongCode = 0;
+	private  int successCode = 0;
+	private  int nonpageCode = 0;
+	private  int apikeyIndex = 0;
+	private  int serviceIdIndex = 0;
+	private  int maximum = 1;
+	private  int temp = 1;
+	private  String tempString = " ";
+	private  String maximumString = " ";
 	private boolean apiCheck = false;
 	private boolean serviceIdCheck = false;
 
 	
-	private static int allsum = 0;
+	private  int allsum = 0;
 	
 	ArrayList <String> apiKeyList = new ArrayList <String>() ;
 	ArrayList <Integer> apikeyCountList = new ArrayList <Integer>();
