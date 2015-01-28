@@ -13,6 +13,24 @@ import org.springframework.stereotype.Service;
 @Component
 
 public class Analyze {
+	
+	private volatile static Analyze instance;
+	
+	private Analyze() {
+		
+	}
+	
+	public static Analyze getInstance() {
+		if(instance == null) {
+			synchronized(Analyze.class) {
+				if(instance == null) {
+					instance = new Analyze();
+				}
+			}
+		}
+		return instance;
+	}
+	
 
 	private  int ie = 0;
 	private  int firefox = 0;
@@ -72,7 +90,7 @@ public class Analyze {
 		
 		
 		int startIndex = logfile.lastIndexOf("/");
-		int endIndex = logfile.indexOf("?");
+		int endIndex = logfile.indexOf("apikey");
 		String serviceId = logfile.substring(startIndex+1, endIndex);
 
 		for(int i=serviceIdIndex-1;i>=0;i--) {
@@ -90,7 +108,7 @@ public class Analyze {
 		else {
 			serviceIdCheck=false;
 		}
-		
+
 	}
 	
 	public void countServiceId() {
@@ -122,26 +140,34 @@ public class Analyze {
 		
 	}
 	
-	public void readApiKey(String logfile)  {
+	public void readApiKey(String logfile){
 
 		int startIndex = logfile.indexOf("=");
 		int endIndex = logfile.indexOf("&");
 		String apiKey = logfile.substring(startIndex+1, endIndex);
+		
+		try {
+			
+			for(int i=apikeyIndex-1;i>=0;i--) {
+				if(apiKeyList.get(i)==apiKey) {
+					apikeyCountList.add(i,+1);
+					apiCheck = true;
+					break;
+				}
 
-		for(int i=apikeyIndex-1;i>=0;i--) {
-			if(apiKeyList.get(i)==apiKey) {
-				apikeyCountList.add(i,+1);
-				apiCheck = true;
-				break;
 			}
-		}
-		if(apiCheck==false) {
-			apiKeyList.add(apikeyIndex,apiKey);
-			apikeyCountList.add(apikeyIndex,1);
-			apikeyIndex+=1;
-		}
-		else {
-			apiCheck=false;
+			if(apiCheck==false) {
+				apiKeyList.add(apikeyIndex,apiKey);
+				apikeyCountList.add(apikeyIndex,1);
+				apikeyIndex+=1;
+			}
+			else {
+				apiCheck=false;
+			}
+			
+		}catch(StringIndexOutOfBoundsException e){
+			apiKey = "null";
+			System.out.println("예외");
 		}
 		
 	}
@@ -217,7 +243,7 @@ public class Analyze {
 	
 
 	
-	public void readTime(String logfile) {
+	public void readTime(String logfile){
 		int startIndex = logfile.indexOf(" ");
 		int endIndex = logfile.lastIndexOf("]");
 		String time = logfile.substring(startIndex+1, endIndex);
