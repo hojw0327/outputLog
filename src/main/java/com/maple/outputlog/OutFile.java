@@ -1,6 +1,7 @@
 package com.maple.outputlog;
 
 import java.io.FileOutputStream;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class OutFile {
 	
 	@Autowired
+	Print print;
 
 	
 	OutFile() throws IOException {

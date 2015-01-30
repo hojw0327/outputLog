@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class ReadFile {
 	
 	@Autowired
+	Analyze analyze;
 	
 	private String line;
 

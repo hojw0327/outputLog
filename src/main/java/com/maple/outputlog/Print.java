@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 public class Print {
 	
-	@Autowired
 	
 	private volatile static Print instance;
 

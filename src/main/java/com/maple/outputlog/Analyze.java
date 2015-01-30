@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 public class Analyze {
 	
-	@Autowired
 		
 
 	private  int ie = 0;
