@@ -1,14 +1,19 @@
 package com.maple.outputlog;
 import java.io.*;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class Main {
 	public static void main(String[] args) throws IOException {
 		
-		ReadFile readFile = new ReadFile();
-		OutFile outFile = new OutFile();
-		Analyze analyze = new Analyze();
-		Printer print = new Printer();
-
+		ClassPathXmlApplicationContext context = 
+				new ClassPathXmlApplicationContext("/applicationContext.xml");
+		
+		ReadFile readFile = (ReadFile)context.getBean("readFile");
+		OutFile outFile = (OutFile)context.getBean("outFile");
+		Analyze analyze = (Analyze)context.getBean("analyze");
+		Print print = (Print)context.getBean("print");
+		
 		readFile.fileInput();
 
 		outFile.addition_of_content("최다호출API키:", analyze.outApiKey());

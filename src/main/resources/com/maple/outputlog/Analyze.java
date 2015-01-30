@@ -2,28 +2,39 @@ package com.maple.outputlog;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Analyze {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-	private static int ie = 0;
-	private static int firefox = 0;
-	private static int safari = 0;
-	private static int chrome = 0;
-	private static int opera = 0;
-	private static float rate = 0;
-	private static int wrongCode = 0;
-	private static int successCode = 0;
-	private static int nonpageCode = 0;
-	private int apikeyIndex = 0;
-	private int serviceIdIndex = 0;
-	private int maximum = 1;
-	private int temp = 1;
-	private String tempString = " ";
-	private String maximumString = " ";
+@Service("analyze")
+
+public class Analyze {
+	
+	@Autowired
+		
+
+	private  int ie = 0;
+	private  int firefox = 0;
+	private  int safari = 0;
+	private  int chrome = 0;
+	private  int opera = 0;
+	private  float rate = 0;
+	private  int wrongCode = 0;
+	private  int successCode = 0;
+	private  int nonpageCode = 0;
+	private  int apikeyIndex = 0;
+	private  int serviceIdIndex = 0;
+	private  int maximum = 1;
+	private  int temp = 1;
+	private  String tempString = " ";
+	private  String maximumString = " ";
 	private boolean apiCheck = false;
 	private boolean serviceIdCheck = false;
 
 	
-	private static int allsum = 0;
+	private  int allsum = 0;
 	
 	ArrayList <String> apiKeyList = new ArrayList <String>() ;
 	ArrayList <Integer> apikeyCountList = new ArrayList <Integer>();
@@ -62,7 +73,7 @@ public class Analyze {
 		
 		
 		int startIndex = logfile.lastIndexOf("/");
-		int endIndex = logfile.indexOf("?");
+		int endIndex = logfile.indexOf("apikey");
 		String serviceId = logfile.substring(startIndex+1, endIndex);
 
 		for(int i=serviceIdIndex-1;i>=0;i--) {
@@ -80,7 +91,7 @@ public class Analyze {
 		else {
 			serviceIdCheck=false;
 		}
-		
+
 	}
 	
 	public void countServiceId() {
@@ -112,26 +123,34 @@ public class Analyze {
 		
 	}
 	
-	public void readApiKey(String logfile)  {
+	public void readApiKey(String logfile){
 
 		int startIndex = logfile.indexOf("=");
 		int endIndex = logfile.indexOf("&");
 		String apiKey = logfile.substring(startIndex+1, endIndex);
+		
+		try {
+			
+			for(int i=apikeyIndex-1;i>=0;i--) {
+				if(apiKeyList.get(i)==apiKey) {
+					apikeyCountList.add(i,+1);
+					apiCheck = true;
+					break;
+				}
 
-		for(int i=apikeyIndex-1;i>=0;i--) {
-			if(apiKeyList.get(i)==apiKey) {
-				apikeyCountList.add(i,+1);
-				apiCheck = true;
-				break;
 			}
-		}
-		if(apiCheck==false) {
-			apiKeyList.add(apikeyIndex,apiKey);
-			apikeyCountList.add(apikeyIndex,1);
-			apikeyIndex+=1;
-		}
-		else {
-			apiCheck=false;
+			if(apiCheck==false) {
+				apiKeyList.add(apikeyIndex,apiKey);
+				apikeyCountList.add(apikeyIndex,1);
+				apikeyIndex+=1;
+			}
+			else {
+				apiCheck=false;
+			}
+			
+		}catch(StringIndexOutOfBoundsException e){
+			apiKey = "null";
+			System.out.println("예외");
 		}
 		
 	}
@@ -207,7 +226,7 @@ public class Analyze {
 	
 
 	
-	public void readTime(String logfile) {
+	public void readTime(String logfile){
 		int startIndex = logfile.indexOf(" ");
 		int endIndex = logfile.lastIndexOf("]");
 		String time = logfile.substring(startIndex+1, endIndex);
