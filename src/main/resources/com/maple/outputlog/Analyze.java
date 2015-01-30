@@ -2,35 +2,18 @@ package com.maple.outputlog;
 import java.io.*;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-@Service
-@Controller
-@Repository
-@Component
+@Service("analyze")
 
 public class Analyze {
 	
-	private volatile static Analyze instance;
-	
-	private Analyze() {
+	@Autowired
 		
-	}
-	
-	public static Analyze getInstance() {
-		if(instance == null) {
-			synchronized(Analyze.class) {
-				if(instance == null) {
-					instance = new Analyze();
-				}
-			}
-		}
-		return instance;
-	}
-	
 
 	private  int ie = 0;
 	private  int firefox = 0;

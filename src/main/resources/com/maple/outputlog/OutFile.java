@@ -5,10 +5,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service("outFile")
+
 public class OutFile {
 	
-	Analyze analyze = Analyze.getInstance();
-	Print print = Print.getInstance();
+	@Autowired
+
 	
 	OutFile() throws IOException {
 		FileOutputStream craetion = new FileOutputStream("C:/java/outfile.txt");

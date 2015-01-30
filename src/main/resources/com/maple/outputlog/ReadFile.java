@@ -4,12 +4,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+@Service("readFile")
 public class ReadFile {
+	
+	@Autowired
 	
 	private String line;
 
@@ -20,7 +24,6 @@ public class ReadFile {
 		BufferedReader input = new BufferedReader(file);
 		HashMap<String, String> map = new HashMap<String, String>();
 		
-		Analyze analyze = Analyze.getInstance();
 		
 		while((input.readLine())!=null) {
 			String line = input.readLine(); //한 줄 읽어오기

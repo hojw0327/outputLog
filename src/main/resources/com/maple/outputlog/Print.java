@@ -1,6 +1,13 @@
 package com.maple.outputlog;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service("print")
+
 public class Print {
+	
+	@Autowired
 	
 	private volatile static Print instance;
 
