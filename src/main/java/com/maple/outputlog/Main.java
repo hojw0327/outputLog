@@ -16,6 +16,7 @@ public class Main {
 		
 		readFile.fileInput();
 
+/*
 		outFile.addition_of_content("최다호출API키:", analyze.outApiKey());
 		outFile.addition_of_content("상태코드별 횟수");
 		print.print();
@@ -41,7 +42,7 @@ public class Main {
 		outFile.addition_of_content("Safari:"+analyze.outSafari());
 		print.print();
 		outFile.addition_of_content("Opera:"+analyze.outOpera());
-
+*/
 
 	}
 }

@@ -34,6 +34,7 @@ public class ReadFile {
 			map.put("web",result[2]);
 			map.put("date",result[3]);
 			analyze.readApiKey(map.get("url"));//apikey 분석(어떤 apikey가 있는지,몇개가 있는지)
+			//analyze.outApiKey();
 			analyze.readStateCode(map.get("state"));//상태코드 분석(상태코드가 각각 몇개씩 있는지)
 			analyze.readUrl(map.get("url"));//서비스아이디 분석(각 몇개가 있는지 요청수)
 			analyze.readWeb(map.get("web"));//web브라우저 별 사용 비율을 위한 갯수 세기
