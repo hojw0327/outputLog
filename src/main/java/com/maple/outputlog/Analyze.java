@@ -69,11 +69,10 @@ public class Analyze {
 	
 	public void readUrl(String logfile) {
 
-		
-		
 		int startIndex = logfile.lastIndexOf("/");
 		int endIndex = logfile.indexOf("apikey");
 		String serviceId = logfile.substring(startIndex+1, endIndex);
+		System.out.println(serviceId);
 
 		for(int i=serviceIdIndex-1;i>=0;i--) {
 			if(serviceIdList.get(i)==serviceId) {
@@ -124,11 +123,20 @@ public class Analyze {
 	
 	public void readApiKey(String logfile){
 
-		int startIndex = logfile.indexOf("=");
-		int endIndex = logfile.indexOf("&");
-		String apiKey = logfile.substring(startIndex+1, endIndex);
+		int testStart = logfile.lastIndexOf("/");
+		int testEnd = logfile.indexOf("q");
+		String testKey = logfile.substring(testStart, testEnd);
 		
-		try {
+		boolean testCheck = testKey.contains("apikey");
+		
+		if(testCheck==true) {
+			
+			int startIndex = testKey.indexOf("=");
+			int endIndex = testKey.indexOf("&");
+			
+			String apiKey = testKey.substring(startIndex+1, endIndex);
+			
+			System.out.println(apiKey);
 			
 			for(int i=apikeyIndex-1;i>=0;i--) {
 				if(apiKeyList.get(i)==apiKey) {
@@ -146,12 +154,19 @@ public class Analyze {
 			else {
 				apiCheck=false;
 			}
-			
-		}catch(StringIndexOutOfBoundsException e){
-			apiKey = "null";
-			System.out.println("예외");
+						
+		}
+		else if(testCheck==false) {
+			apiKeyList.add(apikeyIndex,"00AA");
+			apikeyCountList.add(apikeyIndex,1);
+			apikeyIndex+=1;
 		}
 		
+		else {
+			apiCheck=false;
+		}
+
+			
 	}
 	
 	public String outApiKey() {
